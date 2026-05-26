@@ -41,6 +41,7 @@ repositories {
     }
     maven { url "https://maven.blamejared.com" }
     maven { url "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+    maven { url "https://maven.createmod.net" }
 }
 
 base {
@@ -132,6 +133,7 @@ configurations {
 
 dependencies {
     implementation "dev.ryanhcode.sable:sable-common-1.21.1:${property('deps.sable')}"
+    compileOnly "net.createmod.catnip:Catnip-NeoForge-1.21.1:${property('deps.catnip')}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
