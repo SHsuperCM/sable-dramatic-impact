@@ -1,13 +1,6 @@
 {
-  "itemGroup.sablefunnyimpact": "Example Mod Tab",
-  "block.sablefunnyimpact.example_block": "Example Block",
-  "item.sablefunnyimpact.example_item": "Example Item",
-
   "sablefunnyimpact.configuration.title": "Sable: Funny Impact Configs",
   "sablefunnyimpact.configuration.section.sablefunnyimpact.common.toml": "Sable: Funny Impact Configs",
   "sablefunnyimpact.configuration.section.sablefunnyimpact.common.toml.title": "Sable: Funny Impact Configs",
-  "sablefunnyimpact.configuration.items": "Item List",
-  "sablefunnyimpact.configuration.logDirtBlock": "Log Dirt Block",
-  "sablefunnyimpact.configuration.magicNumberIntroduction": "Magic Number Text",
-  "sablefunnyimpact.configuration.magicNumber": "Magic Number"
+
 }
