@@ -1,9 +1,9 @@
 package io.shcm.shsupercm.neoforge.sablefunnyimpact.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.ryanhcode.sable.companion.math.Pose3d;
 import dev.ryanhcode.sable.physics.impl.rapier.RapierPhysicsPipeline;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
+import io.shcm.shsupercm.neoforge.sablefunnyimpact.Config;
 import io.shcm.shsupercm.neoforge.sablefunnyimpact.SableFunnyImpact;
 import net.minecraft.server.level.ServerLevel;
 import org.joml.Vector3d;
@@ -20,10 +20,13 @@ public class RapierPhysicsPipelineMixin {
 
     @Inject(method = "processCollisionEffects", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(DD)D"))
     private void sablefunnyimpact$processCollisionEffects(CallbackInfo ci, @Local(name = "localPointA") Vector3d localPointA, @Local(name = "forceAmount") double forceAmount, @Local(name = "subLevelA") ServerSubLevel subLevelA, @Local(name = "subLevelB") ServerSubLevel subLevelB) {
+        if (!Config.enableEffects.getAsBoolean())
+            return;
+
         Vector3d globalPointA = new Vector3d(localPointA);
         if (subLevelA != null)
             subLevelA.logicalPose().orientation().transform(localPointA, globalPointA).add(subLevelA.logicalPose().position());
 
-        SableFunnyImpact.collisions.process(this.level, globalPointA, forceAmount, subLevelA, subLevelB);
+        SableFunnyImpact.collisions.addCollision(this.level, globalPointA, forceAmount, subLevelA, subLevelB);
     }
 }

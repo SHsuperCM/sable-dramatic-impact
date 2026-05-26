@@ -1,12 +1,16 @@
 package io.shcm.shsupercm.neoforge.sablefunnyimpact;
 
 import com.mojang.logging.LogUtils;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
 @Mod(value = "sablefunnyimpact")
+@EventBusSubscriber
 public class SableFunnyImpact {
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -14,5 +18,13 @@ public class SableFunnyImpact {
 
     public SableFunnyImpact(ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    @SubscribeEvent
+    public static void tick(ServerTickEvent.Post event) {
+        if (!Config.enableEffects.getAsBoolean())
+            return;
+
+        collisions.tick(event.getServer().getTickCount());
     }
 }

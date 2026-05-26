@@ -5,21 +5,51 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import org.joml.Vector3d;
 
+import java.util.LinkedHashMap;
+
 public class CollisionProcessor {
-    public void process(ServerLevel level, Vector3d position, double force, ServerSubLevel subLevelA, ServerSubLevel subLevelB) {
-        if (force < 200)
+    public LinkedHashMap<Object, Collision> collisions = new LinkedHashMap<>();
+
+    public void addCollision(ServerLevel level, Vector3d position, double force, ServerSubLevel subLevelA, ServerSubLevel subLevelB) {
+        if (!Config.enableEffects.getAsBoolean())
             return;
 
-        Vector3d speedA = new Vector3d(0), speedB = new Vector3d(0);
+        if (force < Config.minForce.getAsDouble())
+            return;
+
+        Vector3d velocityA = new Vector3d(0), velocityB = new Vector3d(0);
 
         if (subLevelA != null)
-            subLevelA.logicalPose().position().sub(subLevelA.lastPose().position(), speedA);
+            subLevelA.logicalPose().position().sub(subLevelA.lastPose().position(), velocityA);
         if (subLevelB != null)
-            subLevelB.logicalPose().position().sub(subLevelB.lastPose().position(), speedB);
+            subLevelB.logicalPose().position().sub(subLevelB.lastPose().position(), velocityB);
 
-        double bpsDiff = speedB.sub(speedA, new Vector3d()).length() * 20;
+        double speed = velocityB.sub(velocityA, new Vector3d()).length() * 20;
 
-        if (bpsDiff > 10) {
+        if (speed >= Config.minBPS.getAsDouble()) {
+            Collision collision = new Collision(level, position, force, speed, velocityA, velocityB);
+            Collision recentCollision = this.collisions.get(collision.key());
+            if (recentCollision == null || collision.impactForce > recentCollision.impactForce) {
+                collision.process();
+                this.collisions.put(collision.key(), collision);
+            }
+        }
+    }
+
+    public void tick(int ticks) {
+        if (ticks % 20 == 0)
+            collisions.clear();
+    }
+
+    public record Collision(ServerLevel level, Vector3d position, double impactForce, double speed, Vector3d velocitySubLevelA, Vector3d velocitySubLevelB) {
+        public Object key() {
+            if (Config.avoidDuplicates.getAsBoolean())
+                return this.position.mul(0.1, new Vector3d()).round().div(0.1);
+            else
+                return this;
+        }
+
+        public void process() {
             level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, 1, 0, 0, 0, 1);
         }
     }
