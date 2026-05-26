@@ -1,4 +1,4 @@
-package io.shcm.shsupercm.neoforge.sablefunnyimpact;
+package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import net.createmod.catnip.config.ui.BaseConfigScreen;
 import net.neoforged.api.distmarker.Dist;
@@ -7,10 +7,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-@Mod(value = "sablefunnyimpact", dist = Dist.CLIENT)
-public class SableFunnyImpactClient {
+@Mod(value = "sabledramaticimpact", dist = Dist.CLIENT)
+public class SableDramaticImpactClient {
 
-    public SableFunnyImpactClient(ModContainer container) {
+    public SableDramaticImpactClient(ModContainer container) {
         try {
             container.registerExtensionPoint(IConfigScreenFactory.class, (mod, parent) -> new BaseConfigScreen(parent, mod.getModId()));
         } catch (Exception e) {

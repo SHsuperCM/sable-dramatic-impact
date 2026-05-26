@@ -1,4 +1,4 @@
-package io.shcm.shsupercm.neoforge.sablefunnyimpact;
+package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 

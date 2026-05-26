@@ -1,4 +1,4 @@
-package io.shcm.shsupercm.neoforge.sablefunnyimpact;
+package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -9,14 +9,14 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
-@Mod(value = "sablefunnyimpact")
+@Mod(value = "sabledramaticimpact")
 @EventBusSubscriber
-public class SableFunnyImpact {
+public class SableDramaticImpact {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static CollisionProcessor collisions = new CollisionProcessor();
 
-    public SableFunnyImpact(ModContainer container) {
+    public SableDramaticImpact(ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 

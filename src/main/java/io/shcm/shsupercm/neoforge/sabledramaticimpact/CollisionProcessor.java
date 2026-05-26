@@ -1,4 +1,4 @@
-package io.shcm.shsupercm.neoforge.sablefunnyimpact;
+package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import net.minecraft.core.particles.ParticleTypes;
