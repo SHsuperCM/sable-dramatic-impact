@@ -3,9 +3,13 @@ package io.shcm.shsupercm.neoforge.sablefunnyimpact;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import org.joml.Vector3d;
 
 import java.util.LinkedHashMap;
+
+import static java.lang.Math.clamp;
 
 public class CollisionProcessor {
     public LinkedHashMap<Object, Collision> collisions = new LinkedHashMap<>();
@@ -26,13 +30,14 @@ public class CollisionProcessor {
 
         double speed = velocityB.sub(velocityA, new Vector3d()).length() * 20;
 
-        if (speed >= Config.minBPS.getAsDouble()) {
-            Collision collision = new Collision(level, position, force, speed, velocityA, velocityB);
-            Collision recentCollision = this.collisions.get(collision.key());
-            if (recentCollision == null || collision.impactForce > recentCollision.impactForce) {
-                collision.process();
-                this.collisions.put(collision.key(), collision);
-            }
+        if (speed < Config.minBPS.getAsDouble())
+            return;
+
+        Collision collision = new Collision(level, position, force, speed, velocityA, velocityB);
+        Collision recentCollision = this.collisions.get(collision.key());
+        if (recentCollision == null || collision.impactForce > recentCollision.impactForce) {
+            collision.process();
+            this.collisions.put(collision.key(), collision);
         }
     }
 
@@ -44,13 +49,16 @@ public class CollisionProcessor {
     public record Collision(ServerLevel level, Vector3d position, double impactForce, double speed, Vector3d velocitySubLevelA, Vector3d velocitySubLevelB) {
         public Object key() {
             if (Config.avoidDuplicates.getAsBoolean())
-                return this.position.mul(0.1, new Vector3d()).round().div(0.1);
-            else
-                return this;
+                return this.position.mul(0.1, new Vector3d()).round();
+
+            return this;
         }
 
         public void process() {
-            level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, 1, 0, 0, 0, 1);
+            level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, Config.effectsExplosionParticles.getAsInt(), 1, 1, 1, 1);
+            level.sendParticles(ParticleTypes.WHITE_SMOKE, position.x, position.y, position.z, Config.effectsSmokeParticles.getAsInt(), 1, 1, 1, 0.0001);
+            if (Config.effectsExplosionSound.getAsBoolean())
+                level.playSound(null, position.x, position.y, position.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, clamp(0.5f * ((float)impactForce / (500 * (float)Config.minForce.getAsDouble())), 0.1f, 1f), 1f);
         }
     }
 }
