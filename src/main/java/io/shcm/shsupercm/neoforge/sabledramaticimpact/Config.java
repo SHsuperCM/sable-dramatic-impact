@@ -1,25 +1,32 @@
 package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
+import net.minecraft.Util;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class Config {
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    public static ModConfigSpec.BooleanValue enableEffects;
 
-    public static final ModConfigSpec.BooleanValue enableEffects = BUILDER.define("enableEffects", true);
+    public static ModConfigSpec.BooleanValue avoidDuplicates;
+    public static ModConfigSpec.DoubleValue minBPS;
+    public static ModConfigSpec.DoubleValue minForce;
 
-    // Trigger
-    public static final ModConfigSpec.BooleanValue avoidDuplicates = BUILDER.push("trigger").define("avoidDuplicates", true);
 
-    public static final ModConfigSpec.DoubleValue minBPS = BUILDER.defineInRange("minBPS", 6d, 0, Double.MAX_VALUE);
+    static final ModConfigSpec SPEC = Util.make(new ModConfigSpec.Builder(), builder -> {
+        enableEffects = builder.define("enableEffects", true);
 
-    public static final ModConfigSpec.DoubleValue minForce = BUILDER.defineInRange("minForce", 400d, 0, Double.MAX_VALUE);
+        builder.push("trigger"); {
+            avoidDuplicates = builder.define("avoidDuplicates", true);
+            minBPS = builder.defineInRange("minBPS", 6d, 0, Double.MAX_VALUE);
+            minForce = builder.defineInRange("minForce", 400d, 0, Double.MAX_VALUE);
+        } builder.pop();
 
-    // Effects
-    public static final ModConfigSpec.IntValue effectsExplosionParticles = BUILDER.pop().push("effects").defineInRange("effectsExplosionParticles", 3, 0, Integer.MAX_VALUE);
+        builder.push("effects"); {
+            for (CollisionEffects effect : CollisionEffects.values()) {
+                builder.push(effect.id);
+                effect.registerConfig(builder);
+                builder.pop();
+            }
+        } builder.pop();
 
-    public static final ModConfigSpec.IntValue effectsSmokeParticles = BUILDER.defineInRange("effectsSmokeParticles", 3, 0, Integer.MAX_VALUE);
-
-    public static final ModConfigSpec.BooleanValue effectsExplosionSound = BUILDER.define("effectsExplosionSound", true);
-
-    static final ModConfigSpec SPEC = BUILDER.build();
+    }).build();
 }

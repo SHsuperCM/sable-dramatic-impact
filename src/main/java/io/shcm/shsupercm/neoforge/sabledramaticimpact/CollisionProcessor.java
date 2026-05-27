@@ -1,16 +1,10 @@
 package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
-import io.shcm.shsupercm.neoforge.sabledramaticimpact.compat.CreateBigCannonsCompat;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import org.joml.Vector3d;
 
 import java.util.LinkedHashMap;
-
-import static java.lang.Math.clamp;
 
 public class CollisionProcessor {
     public LinkedHashMap<Object, Collision> collisions = new LinkedHashMap<>();
@@ -56,12 +50,7 @@ public class CollisionProcessor {
         }
 
         public void process() {
-            level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, position.x, position.y, position.z, Config.effectsExplosionParticles.getAsInt(), 1, 1, 1, 1);
-            level.sendParticles(ParticleTypes.WHITE_SMOKE, position.x, position.y, position.z, Config.effectsSmokeParticles.getAsInt(), 1, 1, 1, 0.0001);
-            if (Config.effectsExplosionSound.getAsBoolean())
-                level.playSound(null, position.x, position.y, position.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, clamp(0.5f * ((float)impactForce / (500 * (float)Config.minForce.getAsDouble())), 0.1f, 1f), 1f);
-
-            CreateBigCannonsCompat.INSTANCE.spawnParticle(level, position.x, position.y, position.z);
+            CollisionEffects.playAll(this);
         }
     }
 }
