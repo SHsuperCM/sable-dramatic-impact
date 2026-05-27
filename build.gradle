@@ -39,6 +39,17 @@ repositories {
             includeGroup("dev.ryanhcode.sable-companion")
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
     maven { url "https://maven.blamejared.com" }
     maven { url "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
     maven { url "https://maven.createmod.net" }
@@ -134,6 +145,7 @@ configurations {
 dependencies {
     implementation "dev.ryanhcode.sable:sable-common-1.21.1:${property('deps.sable')}"
     compileOnly "net.createmod.catnip:Catnip-NeoForge-1.21.1:${property('deps.catnip')}"
+    implementation "maven.modrinth:create-big-cannons:bsGaXKEd"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

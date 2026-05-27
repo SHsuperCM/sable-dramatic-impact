@@ -1,8 +1,10 @@
 package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import com.mojang.logging.LogUtils;
+import io.shcm.shsupercm.neoforge.sabledramaticimpact.compat.CreateBigCannonsCompat;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
@@ -18,6 +20,10 @@ public class SableDramaticImpact {
 
     public SableDramaticImpact(ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        if (ModList.get().isLoaded("createbigcannons")) {
+            CreateBigCannonsCompat.INSTANCE = new CreateBigCannonsCompat.Impl();
+        }
     }
 
     @SubscribeEvent

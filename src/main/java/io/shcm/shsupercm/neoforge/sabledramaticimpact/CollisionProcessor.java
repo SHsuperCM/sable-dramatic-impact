@@ -1,6 +1,7 @@
 package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
+import io.shcm.shsupercm.neoforge.sabledramaticimpact.compat.CreateBigCannonsCompat;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -59,6 +60,8 @@ public class CollisionProcessor {
             level.sendParticles(ParticleTypes.WHITE_SMOKE, position.x, position.y, position.z, Config.effectsSmokeParticles.getAsInt(), 1, 1, 1, 0.0001);
             if (Config.effectsExplosionSound.getAsBoolean())
                 level.playSound(null, position.x, position.y, position.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, clamp(0.5f * ((float)impactForce / (500 * (float)Config.minForce.getAsDouble())), 0.1f, 1f), 1f);
+
+            CreateBigCannonsCompat.INSTANCE.spawnParticle(level, position.x, position.y, position.z);
         }
     }
 }
