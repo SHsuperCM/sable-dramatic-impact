@@ -46,7 +46,7 @@ authors="SHsuperCM"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Makes impacts between Sable sublevels a more immersive experience
+Add explosion effects to sable physics collisions!
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
@@ -81,10 +81,10 @@ config="${mod_id}.mixins.json"
 
 # Here's another dependency
 [[dependencies.${mod_id}]]
-    modId="minecraft"
+    modId="sable"
     type="required"
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="${minecraft_version_range}"
+    versionRange="*"
     ordering="NONE"
     side="BOTH"
 
