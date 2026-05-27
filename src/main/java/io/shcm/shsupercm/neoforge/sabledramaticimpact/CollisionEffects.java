@@ -3,9 +3,14 @@ package io.shcm.shsupercm.neoforge.sabledramaticimpact;
 import io.shcm.shsupercm.neoforge.sabledramaticimpact.compat.CreateBigCannonsCompat;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.neoforged.neoforge.common.ModConfigSpec;
+import org.joml.Vector3d;
+
+import java.text.DecimalFormat;
 
 import static java.lang.Math.clamp;
 
@@ -17,6 +22,19 @@ public enum CollisionEffects {
     }),
     EXPLOSION_SOUND("SoundExplosion", true, (effect, collision) -> {
         collision.level().playSound(null, collision.position().x, collision.position().y, collision.position().z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, clamp(0.5f * ((float)collision.impactForce() / (500 * (float)Config.minForce.getAsDouble())), 0.1f, 1f), 1f);
+    }) {
+        @Override
+        public void registerExtraConfig(ModConfigSpec.Builder builder) {
+
+        }
+    },
+    DEBUG("Debug", false, (effect, collision) -> {
+        for (ServerPlayer player : collision.level().getPlayers(player -> player.position().distanceToSqr(collision.position().x(), collision.position().y(), collision.position().z()) < 100 * 100)) {
+            player.sendSystemMessage(Component.literal("Sable: Dramatic Impact DEBUG COLLISION"));
+            player.sendSystemMessage(Component.literal("At " + collision.position().toString(new DecimalFormat("0.0000")) + (Config.avoidDuplicates.getAsBoolean() ? " keyed " + ((Vector3d)collision.key()).toString(new DecimalFormat("0.0000")) : "")));
+            player.sendSystemMessage(Component.literal("Force of " + new DecimalFormat("0.0000").format(collision.impactForce())));
+            player.sendSystemMessage(Component.literal("Speed of " + new DecimalFormat("0.0000").format(collision.speed())));
+        }
     }) {
         @Override
         public void registerExtraConfig(ModConfigSpec.Builder builder) {
