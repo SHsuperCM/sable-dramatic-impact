@@ -19,7 +19,7 @@ public class Config {
             avoidDuplicates = builder.define("avoidDuplicates", true);
             avoidDuplicatesRange = builder.defineInRange("avoidDuplicatesRange", 5d, 0, Double.MAX_VALUE);
             minBPS = builder.defineInRange("minBPS", 6d, 0, Double.MAX_VALUE);
-            minForce = builder.defineInRange("minForce", 400d, 0, Double.MAX_VALUE);
+            minForce = builder.defineInRange("minForce", 7000d, 0, Double.MAX_VALUE);
         } builder.pop();
 
         builder.push("effects"); {
