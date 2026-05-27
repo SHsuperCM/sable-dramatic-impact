@@ -44,7 +44,7 @@ public class CollisionProcessor {
     public record Collision(ServerLevel level, Vector3d position, double impactForce, double speed, Vector3d velocitySubLevelA, Vector3d velocitySubLevelB) {
         public Object key() {
             if (Config.avoidDuplicates.getAsBoolean())
-                return this.position.mul(0.1, new Vector3d()).round();
+                return this.position.div(Config.avoidDuplicatesRange.getAsDouble(), new Vector3d()).round().mul(Config.avoidDuplicatesRange.getAsDouble());
 
             return this;
         }
